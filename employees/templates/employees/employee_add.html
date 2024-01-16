@@ -1,0 +1,36 @@
+<!-- employees/employee_add.html -->
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'employees/employee.css' %}">
+
+<!-- Add Employee Form Content -->
+<div class="add-employee-form">
+    <h2>Add Employee</h2>
+
+    <form id="employeeForm">
+        <div class="form-group">
+            <label for="ename">Name:</label>
+            <input type="text" id="ename" name="ename" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ephone">Phone:</label>
+            <input type="tel" id="ephone" name="ephone" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+        </div>
+
+        <div class="form-group">
+            <label for="eemail">Email:</label>
+            <input type="email" id="eemail" name="eemail">
+        </div>
+
+        <div class="form-group">
+            <label for="edepartment">Department:</label>
+            <input type="text" id="edepartment" name="edepartment">
+        </div>
+        
+        <!-- Placeholder for including the JavaScript file -->
+        <script src="{% static 'employees/employee.js' %}"></script>
+
+        <button type="button" onclick="submitForm()" style="margin-left: 0px;">Submit</button>
+    </form>
+</div>

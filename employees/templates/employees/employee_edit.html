@@ -1,0 +1,36 @@
+<!-- employees/employee_edit.html -->
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'employees/employee.css' %}">
+
+<!-- Edit Employee Form Content -->
+<div class="edit-employee-form">
+    <h2>Edit Employee</h2>
+
+    <form id="editEmployeeForm">
+        <div class="form-group">
+            <label for="ename">Name:</label>
+            <input type="text" id="ename" name="ename" value="{{ employee.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ephone">Phone:</label>
+            <input type="tel" id="ephone" name="ephone" value="{{ employee.phone }}" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+        </div>
+
+        <div class="form-group">
+            <label for="eemail">Email:</label>
+            <input type="email" id="eemail" name="eemail" value="{{ employee.email }}">
+        </div>
+
+        <div class="form-group">
+            <label for="edepartment">Department:</label>
+            <input type="text" id="edepartment" name="edepartment" value="{{ employee.department }}">
+        </div>
+
+        <button type="button" onclick="submitEditForm()">Submit</button>
+    </form>
+
+    <!-- Placeholder for including the JavaScript file -->
+    <script src="{% static 'employees/employee.js' %}"></script>
+</div>

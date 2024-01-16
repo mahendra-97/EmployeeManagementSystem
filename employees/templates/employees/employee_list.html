@@ -1,0 +1,85 @@
+<!-- your_app/templates/your_app/employee_list.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <link rel="stylesheet" href="{% static 'employees/employee_list.css' %}">
+</head>
+<body>
+
+    <!-- Add Employee Button -->
+    <div class="action-buttons">
+        <button onclick="openAddEmployeeForm()">Add Employee</button>
+    </div>
+
+    <!-- Employee Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="employee-table-body">
+            <!-- Placeholder for employee data -->
+            {% for employee in employees %}s
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.phone }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.department }}</td>
+                    <td>
+                        {% if employee.id %}
+                            <button onclick="openEditEmployeeForm()">Edit</button>
+                            <a href="{% url 'employee-delete-view' employee.id %}"><button>Delete</button></a>
+                        {% else %}
+                            <button disabled>Edit</button>
+                            <button disabled>Delete</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add Employee Popup Form -->
+    <div id="addEmployeeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddEmployeeForm()">&times;</span>
+            {% include 'employees/employee_add.html' %}
+        </div>
+    </div>
+
+    <!-- Edit Employee Popup Form -->
+    <!-- <div id="editEmployeeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditEmployeeForm()">&times;</span>
+            {% include 'employees/employee_edit.html' %}
+        </div>
+    </div> -->
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{% static 'employees/employee.js' %}"></script>
+
+    <script>
+        // You can also close the modal by clicking outside its content
+        window.onclick = function (event) {
+            var modal = document.getElementById('addEmployeeModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
