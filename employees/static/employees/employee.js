@@ -86,55 +86,23 @@ function closeModal() {
 }
 
 
-// function openEditEmployeeForm(employeeId) {
-//     // Fetch employee details based on employeeId (you might use AJAX or other methods)
-//     var employee = getEmployeeDetails(employeeId);
-
-//     // Populate form fields with employee details
-//     document.getElementById('ename').value = employee.name;
-//     document.getElementById('ephone').value = employee.phone;
-//     document.getElementById('eemail').value = employee.email;
-//     document.getElementById('edepartment').value = employee.department;
-
-//     // Display the edit form in a pop-up
-//     var editModal = document.getElementById('editEmployeeModal');
-//     editModal.style.display = 'block';
-// }
-
-
 function openEditEmployeeForm(employeeId) {
-    console.log("Opening Edit Employee Form for ID:", employeeId);
-    
+    console.log(employeeId)
     $.ajax({
-        // url: '/api/employees/' + employeeId + '/',
+        url: `/employees/edit/${employeeId}/`,
         type: "GET",
         success: function (data) {
-            var employee = data.data;
-
-            // Log employee data
-            console.log("Employee Data:", employee);
-
-            // Populate the Edit Employee form with the employee data
-            $('#editEmployeeForm #ename').val(employee.name);
-            $('#editEmployeeForm #ephone').val(employee.phone);
-            $('#editEmployeeForm #eemail').val(employee.email);
-            $('#editEmployeeForm #edepartment').val(employee.department);
-
-            // Display the modal
+            $('#editEmployeeModal .modal-content').html(data);
             $('#editEmployeeModal').show();
         },
-        error: function (error) {
-            console.error('Error loading Edit Employee form:', error);
-
-            // Close the modal in case of an error
-            $('#editEmployeeModal').hide();
+        error: function () {
+            alert('Error loading Edit Employee form.');
         }
     });
+    // Prevent default behavior (navigation)
+    return false;
 }
-
 
 function closeEditEmployeeForm() {
     $('#editEmployeeModal').hide();
 }
-
-

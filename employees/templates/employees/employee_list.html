@@ -31,7 +31,7 @@
         </thead>
         <tbody id="employee-table-body">
             <!-- Placeholder for employee data -->
-            {% for employee in employees %}s
+            {% for employee in employees %}
                 <tr>
                     <td>{{ employee.id }}</td>
                     <td>{{ employee.name }}</td>
@@ -40,8 +40,10 @@
                     <td>{{ employee.department }}</td>
                     <td>
                         {% if employee.id %}
-                            <button onclick="openEditEmployeeForm()">Edit</button>
-                            <a href="{% url 'employee-delete-view' employee.id %}"><button>Delete</button></a>
+                        <button onclick="openEditEmployeeForm(employee.id)">Edit</a>
+                        <div class="action-buttons">
+                            <button>Delete</button>
+                        </div>
                         {% else %}
                             <button disabled>Edit</button>
                             <button disabled>Delete</button>
@@ -61,13 +63,12 @@
     </div>
 
     <!-- Edit Employee Popup Form -->
-    <!-- <div id="editEmployeeModal" class="modal">
+    <div id="editEmployeeModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditEmployeeForm()">&times;</span>
             {% include 'employees/employee_edit.html' %}
         </div>
-    </div> -->
-
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="{% static 'employees/employee.js' %}"></script>
