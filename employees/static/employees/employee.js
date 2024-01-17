@@ -56,7 +56,7 @@ function closeAddEmployeeForm() {
 }   
 
 function submitForm() {
-    console.log("In JS POST");
+    // console.log("In JS POST");
     var formData = {
         ename: document.getElementById('ename').value,
         ephone: document.getElementById('ephone').value,
@@ -89,17 +89,23 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
+var employeeId;
 
 function openEditEmployeeForm(clickedButton) {
     // Retrieve the employee ID from the data attribute
     var employeeId = $(clickedButton).data('employee-id');
-    console.log(employeeId);
+    // console.log(employeeId);
     $.ajax({
         url: '/employees/edit/' + employeeId + '/',
         type: "GET",
         success: function (data) {
-            console.log(data)
-            $('#editEmployeeFormContainer').html(data);
+            console.log(data.employee.id)
+            // Set the values in the form fields
+            $('#edit-employee-id').val(data.employee.id);
+            $('#edit-ename').val(data.employee.name);
+            $('#edit-ephone').val(data.employee.phone);
+            $('#edit-eemail').val(data.employee.email);
+            $('#edit-edepartment').val(data.employee.department);
             $('#editEmployeeModal').show()
         },
         error: function () {
@@ -111,3 +117,44 @@ function openEditEmployeeForm(clickedButton) {
 function closeEditEmployeeForm() {
     $('#editEmployeeModal').hide();
 }
+
+
+function submitEditForm() {
+    // Retrieve form data
+    var formData = {
+        // Assuming these fields have data attributes 'data-employee-id'
+        ename: $('#edit-ename').val(),
+        ephone: $('#edit-ephone').val(),
+        eemail: $('#edit-eemail').val(),
+        edepartment: $('#edit-edepartment').val(),
+        // Retrieve employee ID from data attribute
+        employeeId: $('#editEmployeeFormContainer').data('employee-id')
+    };
+
+    alert(employeeId)
+    // Make AJAX request to update employee data
+    $.ajax({
+        type: "PUT",
+        url: '/api/employees/' + employeeId + '/',  // Assuming you have the employeeId defined
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function (response) {
+            alert('Employee updated successfully!');
+            updateEmployeeList();
+            closeEditEmployeeForm();
+        },
+        error: function (xhr, status, error) {
+            alert('Error updating employee. Please try again.');
+            console.error('Error:', xhr.responseText);
+        }
+    });
+}
+
+// You can bind this function to your form's submit event
+// For example, you can add this in your document ready function:
+// $(document).ready(function () {
+//     $('#editEmployeeForm').submit(function (event) {
+//         event.preventDefault();  // Prevent the default form submission
+//         submitEditForm();
+//     });
+// });

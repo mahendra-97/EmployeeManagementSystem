@@ -9,6 +9,12 @@
     <h2>Edit Employee</h2>
 
     <form id="editEmployeeForm">
+
+        <div class="form-group">
+            <label for="edit-employee-id">Employee ID:</label>
+            <input class="readonly-field" type="text" id="edit-employee-id" name="employee_id" value="{{ employee.id }}" readonly >
+        </div>
+        
         <div class="form-group">
             <label for="edit-ename">Name:</label>
             <input type="text" id="edit-ename" name="ename" value="{{ employee.name }}" required>
@@ -26,7 +32,7 @@
 
         <div class="form-group">
             <label for="edit-edepartment">Department:</label>
-            <input type="text" id="edit-edepartment" name="edepartment" value="IT">
+            <input type="text" id="edit-edepartment" name="edepartment" value="{{ employee.department }}">
         </div>
 
         <!-- Placeholder for including the JavaScript file -->

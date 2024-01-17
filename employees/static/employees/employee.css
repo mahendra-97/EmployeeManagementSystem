@@ -51,3 +51,14 @@ button:hover {
     margin-left: 5px;
     cursor: pointer;
 }
+
+.readonly-field {
+    color: #777; /* Adjust the color to your preference */
+    cursor: not-allowed;
+}
+
+.readonly-field input {
+    border: none;
+    background-color: transparent;
+    width: auto;
+}

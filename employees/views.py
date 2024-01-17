@@ -22,6 +22,7 @@ def employee_edit(request, id):
     print(id)
     employees = Employee.objects.get(id=id)
     employee = {
+                    'id' : employees.id,
                     'name': employees.ename,
                     'phone': employees.ephone,
                     'email': employees.eemail,
@@ -29,7 +30,7 @@ def employee_edit(request, id):
                 }
     print(employee)
     
-    return render(request, 'employees/employee_edit.html', {'employee': employee})
+    return JsonResponse({'employee': employee})
 
 def employee_delete(request, id):
     # Retrieve the employee object or return a 404 error if not found
