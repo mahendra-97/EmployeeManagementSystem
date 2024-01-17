@@ -40,8 +40,8 @@
                     <td>{{ employee.department }}</td>
                     <td>
                         {% if employee.id %}
-                        <button onclick="openEditEmployeeForm('{{employee.id}}')">Edit</button>
-                        <button onclick="deleteEmployeeForm('{{employee.id}}')">Edit</button>
+                            <button onclick="openEditEmployeeForm('{{employee.id}}')">Edit</button>
+                            <button onclick="deleteEmployee('{{employee.id}}')">Edit</button>
                         {% else %}
                             <button disabled>Edit</button>
                             <button disabled>Delete</button>

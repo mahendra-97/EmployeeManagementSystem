@@ -19,7 +19,6 @@ def employee_add(request):
     return render(request, 'employees/employee_add.html')
 
 def employee_edit(request, id):
-    print(id)
     employees = Employee.objects.get(id=id)
     employee = {
                     'id' : employees.id,
@@ -28,22 +27,7 @@ def employee_edit(request, id):
                     'email': employees.eemail,
                     'department': employees.edepartment,
                 }
-    print(employee)
-    
     return JsonResponse({'employee': employee})
-
-def employee_delete(request, id):
-    # Retrieve the employee object or return a 404 error if not found
-    employee = get_object_or_404(Employee, eid=id)
-
-    if request.method == 'POST':
-        # If the request is a POST request, delete the employee and redirect to the employee list view
-        employee.delete()
-        return redirect('employee-list-view')
-    
-    # If the request is not a POST request, render the confirmation page
-    return render(request, 'employees/employee_delete.html', {'employee': employee})
-
 
 
 class EmployeeAPI(APIView):
@@ -108,7 +92,6 @@ class EmployeeAPI(APIView):
 
     def put(self, request, id=None):
         try:
-            print(request)
             data = json.loads(request.body.decode('utf-8'))
             ename = data.get('ename')
             ephone = data.get('ephone')
@@ -138,7 +121,7 @@ class EmployeeAPI(APIView):
 
     def delete(self, request, id):
         try:
-            employee = Employee.objects.get(eid=id)
+            employee = Employee.objects.get(id=id)
             employee.delete()
 
             return JsonResponse({'success': 'Employee deleted successfully'})

@@ -28,9 +28,8 @@ function updateEmployeeList() {
                     '<td>' + employees[i].email + '</td>' +
                     '<td>' + employees[i].department + '</td>' +
                     '<td>' +
-                    // '<button data-employee-id="' + employees[i].id + '" onclick="openEditEmployeeForm(' + employees[i].id + ')">Edit</button>' +
                     '<button data-employee-id=' + employees[i].id + ' onclick="openEditEmployeeForm(this)">Edit</button>' +
-                    '<a><button>Delete</button></a>' +
+                    '<button data-employee-id=' + employees[i].id + ' onclick="deleteEmployee(this)">Delete</button>' +
                     '</td>' +
                     '</tr>');
             }
@@ -152,4 +151,27 @@ function submitEditForm() {
             alert('Error updating employee. Please try again.');
         }
     });
+}
+
+function deleteEmployee(clickedButton) {
+    var employeeId = $(clickedButton).data('employee-id');
+
+    var confirmDelete = confirm('Are you sure you want to delete this employee?');
+
+    if (confirmDelete){
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/employees/' + employeeId + '/',
+            success: function (response) {
+                alert('Employee deleted successfully!');
+                updateEmployeeList();
+            },
+            error: function (xhr, status, error) {
+                alert('Error deleting employee. Please try again.');
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }else{
+        alert('Delete canceled.');
+    }
 }

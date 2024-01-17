@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EmployeeAPI, employee_list, employee_add, employee_edit,employee_delete
+from .views import EmployeeAPI, employee_list, employee_add, employee_edit
 
 urlpatterns = [
     path('api/employees/', EmployeeAPI.as_view(), name='employee-api'),
@@ -13,6 +13,4 @@ urlpatterns = [
     path('employees', employee_list, name='employee-list-view'),
     path('employees/add/', employee_add, name='employee-add-view'),
     path('employees/edit/<int:id>/', employee_edit, name='employee-edit-view'),
-    path('employees/delete/<int:id>/', employee_delete, name='employee-delete-view'),
-    
 ]
