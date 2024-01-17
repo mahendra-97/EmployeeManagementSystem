@@ -23,8 +23,8 @@ function updateEmployeeList() {
                     '<td>' + employees[i].email + '</td>' +
                     '<td>' + employees[i].department + '</td>' +
                     '<td>' +
-                    '<button data-employee-id="' + employees[i].id + '" onclick="openEditEmployeeForm(this)">Edit</button>' +
-                    // '<a><button> Edit</button></a>' +
+                    // '<button data-employee-id="' + employees[i].id + '" onclick="openEditEmployeeForm(' + employees[i].id + ')">Edit</button>' +
+                    '<button data-employee-id=' + employees[i].id + ' onclick="openEditEmployeeForm(this)">Edit</button>' +
                     '<a><button>Delete</button></a>' +
                     '</td>' +
                     '</tr>');
@@ -73,6 +73,9 @@ function submitForm() {
             alert('Employee added successfully!');
             updateEmployeeList();
             closeModal();
+
+            // Clear form fields after successful submission
+            $('#employeeForm :input').val('');
         },
         error: function (xhr, status, error) {
             alert('Error adding employee. Please try again.');
@@ -90,14 +93,14 @@ function closeModal() {
 function openEditEmployeeForm(clickedButton) {
     // Retrieve the employee ID from the data attribute
     var employeeId = $(clickedButton).data('employee-id');
-
-    console.log(employeeId)
+    console.log(employeeId);
     $.ajax({
         url: '/employees/edit/' + employeeId + '/',
         type: "GET",
         success: function (data) {
+            console.log(data)
             $('#editEmployeeFormContainer').html(data);
-            $('#editEmployeeModal').show();
+            $('#editEmployeeModal').show()
         },
         error: function () {
             alert('Error loading Edit Employee form.');

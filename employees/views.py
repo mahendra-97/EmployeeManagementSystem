@@ -1,12 +1,14 @@
 import json
 from django.urls import path
 from django.http import JsonResponse
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Employee
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 import re
 
 def employee_list(request):
@@ -17,8 +19,17 @@ def employee_add(request):
     return render(request, 'employees/employee_add.html')
 
 def employee_edit(request, id):
-    employees = get_object_or_404(Employee, id=id)
-    return render(request, 'employees/employee_edit.html',{'employees':employees})
+    print(id)
+    employees = Employee.objects.get(id=id)
+    employee = {
+                    'name': employees.ename,
+                    'phone': employees.ephone,
+                    'email': employees.eemail,
+                    'department': employees.edepartment,
+                }
+    print(employee)
+    
+    return render(request, 'employees/employee_edit.html', {'employee': employee})
 
 def employee_delete(request, id):
     # Retrieve the employee object or return a 404 error if not found
@@ -97,10 +108,11 @@ class EmployeeAPI(APIView):
     def put(self, request, id=None):
         try:
             print("in put")
-            name = request.POST.get('ename')
-            phone = request.POST.get('ephone')
-            email = request.POST.get('eemail')
-            department = request.POST.get('edepartment')
+            data = json.loads(request.body.decode('utf-8'))
+            name = data.get('ename')
+            phone = data.get('ephone')
+            email = data.get('eemail')
+            department = data.get('edepartment')
 
             employee = Employee.objects.get(eid=id)
             employee.ename = name
@@ -108,6 +120,16 @@ class EmployeeAPI(APIView):
             employee.eemail = email
             employee.edepartment = department
             employee.save()
+
+            # updated_data = {
+            # 'id': employee.id,
+            # 'name': employee.ename,
+            # 'phone': employee.ephone,
+            # 'email': employee.eemail,
+            # 'department': employee.edepartment,
+            # }
+
+            # return JsonResponse({'success': 'Employee updated successfully', 'data': updated_data})
 
             return JsonResponse({'success': 'Employee updated successfully'})
 
