@@ -1,7 +1,7 @@
 asgiref==3.7.2
 certifi==2023.11.17
 distlib==0.3.8
-Django==5.0
+Django==4.2.9
 django-extensions==3.2.3
 djangorestframework==3.14.0
 filelock==3.13.1
