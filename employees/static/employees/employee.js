@@ -12,7 +12,7 @@ function updateEmployeeList() {
         dataType: 'json',
         success: function(data) {
             var employees = data.data;
-
+            // console.log("employee=",data)
             $('#employee-table-body').empty();
 
             for (var i = 0; i < employees.length; i++) {
@@ -23,8 +23,9 @@ function updateEmployeeList() {
                     '<td>' + employees[i].email + '</td>' +
                     '<td>' + employees[i].department + '</td>' +
                     '<td>' +
-                    '<a href="/employees/edit/' + employees[i].id + '"><button>Edit</button></a>' +
-                    '<a href="/employees/delete/' + employees[i].id + '"><button>Delete</button></a>' +
+                    '<button data-employee-id="' + employees[i].id + '" onclick="openEditEmployeeForm(this)">Edit</button>' +
+                    // '<a><button> Edit</button></a>' +
+                    '<a><button>Delete</button></a>' +
                     '</td>' +
                     '</tr>');
             }
@@ -86,21 +87,22 @@ function closeModal() {
 }
 
 
-function openEditEmployeeForm(employeeId) {
+function openEditEmployeeForm(clickedButton) {
+    // Retrieve the employee ID from the data attribute
+    var employeeId = $(clickedButton).data('employee-id');
+
     console.log(employeeId)
     $.ajax({
-        url: `/employees/edit/${employeeId}/`,
+        url: '/employees/edit/' + employeeId + '/',
         type: "GET",
         success: function (data) {
-            $('#editEmployeeModal .modal-content').html(data);
+            $('#editEmployeeFormContainer').html(data);
             $('#editEmployeeModal').show();
         },
         error: function () {
             alert('Error loading Edit Employee form.');
         }
     });
-    // Prevent default behavior (navigation)
-    return false;
 }
 
 function closeEditEmployeeForm() {

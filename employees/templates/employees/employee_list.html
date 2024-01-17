@@ -41,9 +41,7 @@
                     <td>
                         {% if employee.id %}
                         <button onclick="openEditEmployeeForm(employee.id)">Edit</a>
-                        <div class="action-buttons">
-                            <button>Delete</button>
-                        </div>
+                        <button>Delete</button>
                         {% else %}
                             <button disabled>Edit</button>
                             <button disabled>Delete</button>
@@ -76,11 +74,21 @@
     <script>
         // You can also close the modal by clicking outside its content
         window.onclick = function (event) {
-            var modal = document.getElementById('addEmployeeModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
+            var addEmployeeModal = document.getElementById('addEmployeeModal');
+            var editEmployeeModal = document.getElementById('editEmployeeModal');
+
+            // Check if the click is outside the addEmployeeModal
+            if (event.target == addEmployeeModal) {
+                addEmployeeModal.style.display = 'none';
+            }
+
+            // Check if the click is outside the editEmployeeModal
+            if (event.target == editEmployeeModal) {
+                editEmployeeModal.style.display = 'none';
             }
         };
+
+        
     </script>
 </body>
 </html>
