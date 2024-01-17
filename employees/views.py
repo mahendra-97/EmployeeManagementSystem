@@ -85,8 +85,8 @@ class EmployeeAPI(APIView):
             eemail = data.get('eemail')
             edepartment = data.get('edepartment')
 
-
-            print(f"data = {ename},{ephone},{eemail},{edepartment}")
+            # print(f"data = {ename},{ephone},{eemail},{edepartment}")
+            
             # eemail_list = [email.strip() for email in eemail.split(',')]
             # for email in eemail_list:
             #     validate_email(email)
@@ -108,29 +108,21 @@ class EmployeeAPI(APIView):
 
     def put(self, request, id=None):
         try:
-            print("in put")
+            print(request)
             data = json.loads(request.body.decode('utf-8'))
-            name = data.get('ename')
-            phone = data.get('ephone')
-            email = data.get('eemail')
-            department = data.get('edepartment')
+            ename = data.get('ename')
+            ephone = data.get('ephone')
+            eemail = data.get('eemail')
+            edepartment = data.get('edepartment')
 
-            employee = Employee.objects.get(eid=id)
-            employee.ename = name
-            employee.ephone = phone
-            employee.eemail = email
-            employee.edepartment = department
+            # print(f"data = {ename},{ephone},{eemail},{edepartment}")
+            
+            employee = Employee.objects.get(id=id)
+            employee.ename = ename
+            employee.ephone = ephone
+            employee.eemail = eemail
+            employee.edepartment = edepartment
             employee.save()
-
-            # updated_data = {
-            # 'id': employee.id,
-            # 'name': employee.ename,
-            # 'phone': employee.ephone,
-            # 'email': employee.eemail,
-            # 'department': employee.edepartment,
-            # }
-
-            # return JsonResponse({'success': 'Employee updated successfully', 'data': updated_data})
 
             return JsonResponse({'success': 'Employee updated successfully'})
 

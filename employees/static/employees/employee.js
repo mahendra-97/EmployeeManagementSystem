@@ -1,6 +1,11 @@
 // employee_list.js
 $(document).ready(function() {
     updateEmployeeList();
+
+    $('#editEmployeeForm').submit(function (event) {
+        event.preventDefault();  // Prevent the default form submission
+        submitEditForm();
+    });
 });
 
 function updateEmployeeList() {
@@ -99,7 +104,7 @@ function openEditEmployeeForm(clickedButton) {
         url: '/employees/edit/' + employeeId + '/',
         type: "GET",
         success: function (data) {
-            console.log(data.employee.id)
+            // console.log(data.employee.id)
             // Set the values in the form fields
             $('#edit-employee-id').val(data.employee.id);
             $('#edit-ename').val(data.employee.name);
@@ -122,20 +127,19 @@ function closeEditEmployeeForm() {
 function submitEditForm() {
     // Retrieve form data
     var formData = {
-        // Assuming these fields have data attributes 'data-employee-id'
+        employeeId: $('#edit-employee-id').val(),
         ename: $('#edit-ename').val(),
         ephone: $('#edit-ephone').val(),
         eemail: $('#edit-eemail').val(),
-        edepartment: $('#edit-edepartment').val(),
-        // Retrieve employee ID from data attribute
-        employeeId: $('#editEmployeeFormContainer').data('employee-id')
+        edepartment: $('#edit-edepartment').val()        
     };
+    console.log(formData);
+    console.log(formData.employeeId);
 
-    alert(employeeId)
     // Make AJAX request to update employee data
     $.ajax({
         type: "PUT",
-        url: '/api/employees/' + employeeId + '/',  // Assuming you have the employeeId defined
+        url: '/api/employees/' + formData.employeeId + '/',
         contentType: "application/json",
         data: JSON.stringify(formData),
         success: function (response) {
@@ -144,17 +148,8 @@ function submitEditForm() {
             closeEditEmployeeForm();
         },
         error: function (xhr, status, error) {
-            alert('Error updating employee. Please try again.');
             console.error('Error:', xhr.responseText);
+            alert('Error updating employee. Please try again.');
         }
     });
 }
-
-// You can bind this function to your form's submit event
-// For example, you can add this in your document ready function:
-// $(document).ready(function () {
-//     $('#editEmployeeForm').submit(function (event) {
-//         event.preventDefault();  // Prevent the default form submission
-//         submitEditForm();
-//     });
-// });
