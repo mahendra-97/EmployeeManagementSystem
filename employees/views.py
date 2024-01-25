@@ -56,7 +56,6 @@ class EmployeeAPI(APIView):
             return JsonResponse({'error': str(e)}, status=500)
 
     def post(self, request):
-        print("Hello world")
         try:
             # ename = request.POST.get('ename')
             # ephone = request.POST.get('ephone')
