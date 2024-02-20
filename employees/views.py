@@ -8,8 +8,12 @@ from .models import Employee
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 import re
+
+def home(request):
+    return render(request, 'employees/home.html')
 
 def employee_list(request):
     # employees = Employee.objects.all()
@@ -29,6 +33,25 @@ def employee_edit(request, id):
                 }
     return JsonResponse({'employee': employee})
 
+def login_employeer(request):
+    print("In Login View")
+    return render(request, 'employees/login.html')
+
+def login_view(request):
+    print("In Loginsubmit View")
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('employees') 
+        else:
+            # Return an error message indicating invalid credentials
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    else:
+        # Render the login page template
+        return render(request, 'login.html')
 
 class EmployeeAPI(APIView):
 
@@ -56,24 +79,13 @@ class EmployeeAPI(APIView):
             return JsonResponse({'error': str(e)}, status=500)
 
     def post(self, request):
-        print("Hello world")
         try:
-            # ename = request.POST.get('ename')
-            # ephone = request.POST.get('ephone')
-            # eemail = request.POST.get('eemail')
-            # edepartment = request.POST.get('edepartment')
 
             data = json.loads(request.body.decode('utf-8'))
             ename = data.get('ename')
             ephone = data.get('ephone')
             eemail = data.get('eemail')
             edepartment = data.get('edepartment')
-
-            # print(f"data = {ename},{ephone},{eemail},{edepartment}")
-            
-            # eemail_list = [email.strip() for email in eemail.split(',')]
-            # for email in eemail_list:
-            #     validate_email(email)
 
             pattern = r'^(?:\+91|0)?[6-9]\d{9}$'
             if not re.match(pattern, ephone):
@@ -97,8 +109,6 @@ class EmployeeAPI(APIView):
             ephone = data.get('ephone')
             eemail = data.get('eemail')
             edepartment = data.get('edepartment')
-
-            # print(f"data = {ename},{ephone},{eemail},{edepartment}")
             
             employee = Employee.objects.get(id=id)
             employee.ename = ename

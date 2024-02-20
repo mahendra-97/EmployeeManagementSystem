@@ -6,6 +6,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('employees.urls'))
-    path('', lambda request: redirect('/employees')),
+    path('', lambda request: redirect('/home')),
     path('', include('employees.urls')),
 ]

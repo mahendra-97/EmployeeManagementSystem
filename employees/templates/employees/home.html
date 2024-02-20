@@ -1,0 +1,48 @@
+<!-- templates/home.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management Home</title>
+    <link rel="stylesheet" href="{% static 'employees/home.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'employees/employee.js' %}"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to the Employee Management System</h1>
+        <button onclick="loginPage()" style="margin-right: 20px;">Login</button>
+    </header>
+
+    <section class="main-content">
+        <p>This is the home page of the Employee Management System.</p>
+        <p>Explore the features and manage your employee data efficiently.</p>
+
+    </section>
+
+    <section class="features">
+        <h2>Key Features</h2>
+        <ul>
+            <li>Employee List Management</li>
+            <li>Efficient Employee Editing</li>
+            <li>Integrated API for Data Retrieval</li>
+            <!-- Add more features -->
+        </ul>
+    </section>
+
+    <section class="updates">
+        <h2>Recent Updates</h2>
+        <p>Check out the latest features and improvements in the system.</p>
+        <!-- Add recent updates content -->
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Employee Management System</p>
+    </footer>
+
+</body>
+</html>

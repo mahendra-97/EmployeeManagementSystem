@@ -8,9 +8,58 @@ $(document).ready(function() {
     });
 });
 
-function updateEmployeeList() {
-    console.log("In Js File")
+function loginPage() {
+    console.log("in login JS");
+    window.location.href = "/login/";
+}
 
+function submitLogin(){
+    // event.preventDefault();
+
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+
+    var loginData = {
+        username: username,
+        password: password,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+    };
+    alert("Username:"+ username);
+    alert("Password:"+ password);
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/login/',
+        contentType: 'application/json',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+        data: JSON.stringify(loginData),
+        success: function(response) {
+            console.log('Login successful');
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', xhr.responseText);
+            alert('Login failed. Please try again.');
+        }
+    });
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if the cookie name matches the CSRF token cookie name
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function updateEmployeeList() {
     $.ajax({
         type: 'GET',
         url: '/api/employees/',
