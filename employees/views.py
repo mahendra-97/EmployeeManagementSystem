@@ -4,10 +4,13 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Employee
+from .models import Employee, User
+from .forms import UserForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
+# from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 import re
@@ -16,7 +19,6 @@ def home(request):
     return render(request, 'employees/home.html')
 
 def employee_list(request):
-    # employees = Employee.objects.all()
     return render(request, 'employees/employee_list.html')
 
 def employee_add(request):
@@ -33,25 +35,56 @@ def employee_edit(request, id):
                 }
     return JsonResponse({'employee': employee})
 
-def login_employeer(request):
+def signup(request):
+    return render(request, 'employees/signup.html')
+
+def login(request):
     print("In Login View")
     return render(request, 'employees/login.html')
 
-def login_view(request):
+def signup_api(request):
+    print("in signup api")
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        # print(form)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            name = form.cleaned_data['name']
+            contactno = form.cleaned_data['contactno']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            hashed_password = make_password(password)
+            user = User.objects.create(username=username, name=name, contactno=contactno, email=email, password=hashed_password)
+            # print(username, name, contactno,email,password,hashed_password)
+            return JsonResponse({'status_code': 200, 'success': 'Signup successful'})
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({'errors': errors}, status=400)
+    else:
+        form = UserForm()
+    return JsonResponse({'form': form})
+
+def login_api(request):
     print("In Loginsubmit View")
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('employees') 
+        print(username, password)
+        # Retrieve the user from your custom database
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
+
+        if user and user.check_password(password):
+            return JsonResponse({'success': True, 'message': 'Login successful'})
         else:
-            # Return an error message indicating invalid credentials
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
+            # Authentication failed
+            return JsonResponse({'success': False, 'message': 'Invalid username or password'}, status=400)
+
     else:
-        # Render the login page template
-        return render(request, 'login.html')
+        # Handle invalid request method
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
 class EmployeeAPI(APIView):
 
@@ -82,6 +115,7 @@ class EmployeeAPI(APIView):
         try:
 
             data = json.loads(request.body.decode('utf-8'))
+            print(data)
             ename = data.get('ename')
             ephone = data.get('ephone')
             eemail = data.get('eemail')

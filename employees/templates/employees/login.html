@@ -14,7 +14,7 @@
 
     <h1>Login</h1>
 
-    <form id="login-form" method="post">
+    <form id="login" method="post">
         {% csrf_token %}
         <div>
             <label for="username">Username:</label>
@@ -24,10 +24,9 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-
-        <script src="{% static 'employees/employee.js' %}"></script>
-        <button type="submit" onclick="submitLogin()">Login</button>
+        <button type="button" onclick="submitLogin()">Submit</button>
     </form>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'employees/employee.js' %}"></script>
 </body>
 </html>

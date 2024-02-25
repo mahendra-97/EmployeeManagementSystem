@@ -8,30 +8,55 @@ $(document).ready(function() {
     });
 });
 
+function signup() {
+    window.location.href = '/signup_form';
+}
+
+function submitSignup() {
+    event.preventDefault();
+    var formData = $('#signup').serialize();
+
+    $.ajax({
+        type: 'POST',
+        url: 'api/signup/',
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                alert("Signup successful!");
+                console.log('Signup successful');
+                window.location.href = '/home';
+            } else {
+                console.error('Signup failed:', error);
+                alert("Signup failed: " + response.error);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("Error: " + error);
+        }
+    });
+}
+
+
 function loginPage() {
-    console.log("in login JS");
-    window.location.href = "/login/";
+    window.location.href = '/login_form';
 }
 
 function submitLogin(){
-    // event.preventDefault();
-
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
+    var csrftoken = getCookie('csrftoken');
 
     var loginData = {
         username: username,
         password: password,
-        csrfmiddlewaretoken: '{{ csrf_token }}'
+        csrfmiddlewaretoken: csrftoken
     };
-    alert("Username:"+ username);
-    alert("Password:"+ password);
+    console.log("Username:"+ username +" and Password:"+ password);
 
     $.ajax({
         type: 'POST',
-        url: '/api/login/',
+        url: '/api/login/', 
         contentType: 'application/json',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
         data: JSON.stringify(loginData),
         success: function(response) {
             console.log('Login successful');
@@ -49,7 +74,6 @@ function getCookie(name) {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
             var cookie = cookies[i].trim();
-            // Check if the cookie name matches the CSRF token cookie name
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
