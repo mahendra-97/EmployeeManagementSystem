@@ -1,12 +1,10 @@
 import re
 from django.db import models
-from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator   
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.hashers import check_password
 
 def validate_ephone(value):
     pattern = r'^(?:\+91|0)?[6-9]\d{9}$'
@@ -30,6 +28,12 @@ class User(models.Model):
     contactno = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     def __str__(self):
         return self.username

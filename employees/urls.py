@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-# , EmployeeAPI, home, login, employee_list, employee_add, employee_edit
 
 urlpatterns = [
     # API Views

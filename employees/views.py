@@ -1,7 +1,6 @@
 import json
 from django.urls import path
 from django.http import JsonResponse
-from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Employee, User
@@ -9,10 +8,7 @@ from .forms import UserForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
-# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login
-from django.template.loader import render_to_string
 import re
 
 def home(request):
@@ -39,14 +35,11 @@ def signup(request):
     return render(request, 'employees/signup.html')
 
 def login(request):
-    print("In Login View")
     return render(request, 'employees/login.html')
 
 def signup_api(request):
-    print("in signup api")
     if request.method == 'POST':
         form = UserForm(request.POST)
-        # print(form)
         if form.is_valid():
             username = form.cleaned_data['username']
             name = form.cleaned_data['name']
@@ -55,7 +48,6 @@ def signup_api(request):
             password = form.cleaned_data['password']
             hashed_password = make_password(password)
             user = User.objects.create(username=username, name=name, contactno=contactno, email=email, password=hashed_password)
-            # print(username, name, contactno,email,password,hashed_password)
             return JsonResponse({'status_code': 200, 'success': 'Signup successful'})
         else:
             errors = form.errors.as_json()
@@ -65,12 +57,10 @@ def signup_api(request):
     return JsonResponse({'form': form})
 
 def login_api(request):
-    print("In Loginsubmit View")
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        print(username, password)
-        # Retrieve the user from your custom database
+        data = json.loads(request.body.decode('utf-8'))
+        username = data.get('username')
+        password = data.get('password')
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
@@ -79,11 +69,9 @@ def login_api(request):
         if user and user.check_password(password):
             return JsonResponse({'success': True, 'message': 'Login successful'})
         else:
-            # Authentication failed
             return JsonResponse({'success': False, 'message': 'Invalid username or password'}, status=400)
 
     else:
-        # Handle invalid request method
         return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
 class EmployeeAPI(APIView):

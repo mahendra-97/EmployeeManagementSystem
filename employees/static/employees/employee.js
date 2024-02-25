@@ -49,17 +49,20 @@ function submitLogin(){
     var loginData = {
         username: username,
         password: password,
-        csrfmiddlewaretoken: csrftoken
     };
-    console.log("Username:"+ username +" and Password:"+ password);
 
     $.ajax({
         type: 'POST',
         url: '/api/login/', 
         contentType: 'application/json',
         data: JSON.stringify(loginData),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        },
         success: function(response) {
             console.log('Login successful');
+            // updateEmployeeList();
+            window.location.href = '/employees';
         },
         error: function(xhr, status, error) {
             console.error('Error:', xhr.responseText);
