@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'employees.middleware.BasicAuthMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -85,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'employees',
         'USER': 'root',
-        'PASSWORD': 'dbda',
+        'PASSWORD': 'esds',
         'HOST': 'localhost',
         'PORT': '3306',
     }
